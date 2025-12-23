@@ -1,14 +1,8 @@
-/* General Reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-}
+/* Core Layout */
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
 
 body {
-    /* Matches the soft background color in your preferred style */
-    background: linear-gradient(135deg, #e0f2f1 0%, #c8e6c9 100%);
+    background-color: #f0f7f8; /* Soft background from screenshot */
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -16,127 +10,61 @@ body {
     padding: 20px;
 }
 
-/* Landing Page Slider Styles */
-.slider-container {
-    width: 100%;
-    max-width: 800px;
-    background: white;
-    border-radius: 30px;
-    overflow: hidden;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-    position: relative;
-    text-align: center;
-}
+.app-wrapper { width: 100%; max-width: 650px; }
 
-.slides img {
-    width: 100%;
-    height: 400px;
-    object-fit: cover;
-}
-
-.welcome-overlay {
-    padding: 20px;
+.main-card {
     background: #ffffff;
-}
-
-.welcome-overlay h1 {
-    color: #2e7d32;
-    margin-bottom: 5px;
-}
-
-.enter-app {
-    display: inline-block;
-    margin: 20px;
-    padding: 15px 35px;
-    background: #1b7a5a;
-    color: white;
-    border-radius: 50px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: all 0.3s ease;
-}
-
-.enter-app:hover {
-    background: #145c44;
-    transform: scale(1.05);
-}
-
-/* App Card Styles (The "Frosted Glass" Look) */
-.app-container {
-    width: 100%;
-    max-width: 550px;
-    background: rgba(255, 255, 255, 0.85); /* Translucent white */
-    backdrop-filter: blur(10px); /* Blurs the background behind the card */
-    padding: 40px;
     border-radius: 30px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    overflow: hidden; /* Keeps slider corners rounded */
 }
 
-h2 {
-    color: #2e7d32;
-    text-align: center;
-    margin-bottom: 25px;
-    font-size: 1.5rem;
-}
-
-/* Form Layout */
-#cropForm label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 600;
-    color: #444;
-}
-
-#cropForm select, 
-#cropForm input {
+/* Header Image Slider Fix */
+.slider-box {
+    position: relative;
+    height: 350px; /* Fixed height to match screenshot */
     width: 100%;
-    padding: 12px 15px;
-    margin-bottom: 20px;
-    border: 1px solid #999;
-    border-radius: 12px;
-    font-size: 1rem;
-    outline: none;
 }
 
-#cropForm select:focus, 
-#cropForm input:focus {
-    border-color: #2e7d32;
-    box-shadow: 0 0 5px rgba(46, 125, 50, 0.3);
-}
+.slide { display: none; width: 100%; height: 100%; position: relative; }
+.slide.active { display: block; animation: fade 1s; }
 
-/* The Vibrant Green Button */
-button[type="submit"] {
+.slide img {
     width: 100%;
-    padding: 15px;
-    background: #1b7a5a; /* Matches the button in image_be4a47 */
-    color: white;
-    border: none;
-    border-radius: 12px;
-    font-size: 1.1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.3s;
+    height: 100%;
+    object-fit: cover; /* Prevents stretching */
 }
 
-button[type="submit"]:hover {
-    background: #145c44;
+.overlay-content {
+    position: absolute; top: 45%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center; color: white; width: 80%;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.6);
 }
 
-/* Results Section Styling */
-#results {
-    margin-top: 30px;
+.image-caption {
+    position: absolute; bottom: 0; width: 100%;
+    background: rgba(0,0,0,0.3); color: white;
+    padding: 10px; text-align: center; font-size: 0.85rem;
 }
 
-.result-item {
-    background: #f1f8e9;
-    padding: 15px;
-    border-radius: 12px;
-    margin-bottom: 15px;
-    border-left: 5px solid #2e7d32;
+/* Buttons & Inputs */
+.card-footer { background: #e0f2f1; padding: 30px; text-align: center; }
+
+.cta-btn, .submit-btn {
+    background: #1b7a5a;
+    color: white; border: none; padding: 15px 35px;
+    border-radius: 50px; font-weight: bold; cursor: pointer;
 }
 
-canvas {
-    max-width: 100%;
-    margin-top: 20px;
+.form-padding { padding: 40px; }
+.form-title { color: #2e7d32; text-align: center; margin-bottom: 25px; }
+
+.form-group { margin-bottom: 20px; }
+label { display: block; margin-bottom: 8px; font-weight: 500; color: #333; }
+select, input {
+    width: 100%; padding: 12px; border-radius: 12px;
+    border: 1px solid #1b7a5a; font-size: 1rem;
 }
+
+@keyframes fade { from { opacity: 0.4; } to { opacity: 1; } }
