@@ -9,45 +9,42 @@
 </head>
 <body>
 
-    <div class="app-wrapper">
-        <div id="landingSection" class="main-card">
-            <div class="slider-container">
+    <div class="wrapper">
+        <div id="landingSection" class="card">
+            <div class="slider">
                 <div class="slides">
                     <div class="slide active">
-                        <img src="images/millet.webp" alt="Millets">
-                        <div class="overlay-text">
+                        <img src="images/millet.webp" alt="Millet">
+                        <div class="overlay">
                             <h1>Welcome to Agridrop</h1>
                             <p>Your smart guide to water-efficient crops</p>
                         </div>
-                        <div class="img-caption">Low water crops like Millets save water.</div>
                     </div>
                     <div class="slide">
                         <img src="images/OIP.jpeg" alt="Maize">
-                        <div class="overlay-text">
-                            <h1>Maximize Your Yield</h1>
-                            <p>Plan better for a profitable harvest</p>
+                        <div class="overlay">
+                            <h1>Maximize Your Profit</h1>
+                            <p>Smart choices for sustainable farming</p>
                         </div>
-                        <div class="img-caption">Medium water crops like Maize are profitable.</div>
                     </div>
                     <div class="slide">
-                        <img src="images/impact.jpg" alt="Impact">
-                        <div class="overlay-text">
-                            <h1>Smart Farming</h1>
-                            <p>Data-driven choices for every farmer</p>
+                        <img src="images/impact.jpg" alt="Sustainability">
+                        <div class="overlay">
+                            <h1>Efficient Planning</h1>
+                            <p>Better tools for a better harvest</p>
                         </div>
-                        <div class="img-caption">Agridrop helps farmers plan crops efficiently.</div>
                     </div>
                 </div>
             </div>
-            <div class="footer-box">
-                <button id="enterApp" class="start-btn">🌱 Start Planning Your Crops</button>
+            <div class="footer">
+                <button id="enterApp" class="btn-primary">🌱 Start Planning Your Crops</button>
             </div>
         </div>
 
-        <div id="formSection" class="main-card app-padding" style="display:none;">
-            <h2 class="form-title">Agridrop – Water-Efficient Crop Planner</h2>
+        <div id="formSection" class="card form-container" style="display:none;">
+            <h2>Agridrop Crop Planner</h2>
             <form id="cropForm">
-                <div class="form-group">
+                <div class="group">
                     <label>Region:</label>
                     <select id="region" required>
                         <option value="">Select Region</option>
@@ -57,7 +54,7 @@
                         <option>West India</option>
                     </select>
                 </div>
-                <div class="form-group">
+                <div class="group">
                     <label>Water Availability:</label>
                     <select id="water" required>
                         <option value="">Select Level</option>
@@ -66,13 +63,13 @@
                         <option>High</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label>Land Size (in acres):</label>
-                    <input type="number" id="landSize" value="5" min="0.1" step="0.1" required>
+                <div class="group">
+                    <label>Land Size (Acres):</label>
+                    <input type="number" id="landSize" value="5" step="0.1" required>
                 </div>
-                <button type="submit" class="submit-btn">Get Recommendations</button>
+                <button type="submit" class="btn-submit">Get Recommendations</button>
             </form>
-            <div id="results" class="results-container"></div>
+            <div id="results"></div>
         </div>
     </div>
 
