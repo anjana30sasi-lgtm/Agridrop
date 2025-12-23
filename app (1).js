@@ -1,28 +1,11 @@
 // ===== Configuration =====
-// Points to your live Render backend
 const API_URL = 'https://agridrop-vxci.onrender.com';
 
 document.addEventListener('DOMContentLoaded', () => {
-    // ===== Slider Logic =====
-    const slidesContainer = document.querySelector('.slides');
-    const slides = document.querySelectorAll('.slide');
-    const prev = document.querySelector('.prev');
-    const next = document.querySelector('.next');
+    // ===== Navigation Logic =====
     const sliderContainer = document.querySelector('.slider-container');
     const appContainer = document.querySelector('.app-container');
     const enterAppBtn = document.getElementById('enterApp');
-
-    let currentIndex = 0;
-    function showSlide(index) {
-        if (!slidesContainer) return;
-        if (index < 0) index = slides.length - 1;
-        if (index >= slides.length) index = 0;
-        slidesContainer.style.transform = `translateX(-${index * 100}%)`;
-        currentIndex = index;
-    }
-
-    if (prev) prev.addEventListener('click', () => showSlide(currentIndex - 1));
-    if (next) next.addEventListener('click', () => showSlide(currentIndex + 1));
 
     if (enterAppBtn) {
         enterAppBtn.addEventListener('click', () => {
@@ -41,10 +24,8 @@ document.addEventListener('DOMContentLoaded', () => {
         cropForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            // Loading state while waiting for the server to "wake up"
-            resultsDiv.innerHTML = `<p style="color: #27ae60; font-weight: bold; padding: 20px;">
-                Connecting to Agridrop server... Please wait (may take up to 30 seconds for first load).
-            </p>`;
+            // Clear previous errors and show loading message
+            resultsDiv.innerHTML = `<p style="color: #27ae60; font-weight: bold; padding: 10px;">Connecting to server... Please wait.</p>`;
 
             const region = document.getElementById('region').value;
             const water = document.getElementById('water').value;
@@ -59,65 +40,58 @@ document.addEventListener('DOMContentLoaded', () => {
                 displayResults(data, landSize);
             } catch (err) {
                 console.error("Connection Error:", err);
-                resultsDiv.innerHTML = `<p style="color:red; padding: 20px;">
-                    Error: Cannot connect to the database. Ensure the backend is live at ${API_URL}
-                </p>`;
+                resultsDiv.innerHTML = `<p style="color:red; padding: 10px;">Error: Cannot connect to the database. Ensure the backend is live.</p>`;
             }
         });
     }
 
-    // ===== Displaying Results & Charting =====
+    // ===== Detailed Display Logic & Charting =====
     function displayResults(crops, landSize) {
         if (!crops || crops.length === 0) {
-            resultsDiv.innerHTML = `<p style="padding: 20px;">No matching crops found for this selection.</p>`;
+            resultsDiv.innerHTML = `<p style="padding: 10px;">No matching crops found for this selection.</p>`;
             return;
         }
 
         // 1. Text Output Header
-        let html = `<h2 style="color: #27ae60; margin-bottom: 20px; border-bottom: 2px solid #27ae60; padding-bottom: 10px;">
-            Recommended Crops for ${landSize} acre(s):
-        </h2>`;
-        
+        let html = `<h2 style="color: #2c3e50; border-bottom: 2px solid #27ae60; padding-bottom: 10px;">Recommended Crops for ${landSize} acre(s):</h2>`;
         const labels = [], profitData = [];
 
-        // 2. Loop through crops to build the detailed list
+        // 2. Build the detailed text list
         crops.forEach(crop => {
-            // Convert to numbers to ensure calculations and formatting work
+            // Ensure numbers for calculations
             const yieldPerAcre = Number(crop.yield_per_acre);
             const profitPerAcre = Number(crop.profit_per_acre);
-            const totalYield = (yieldPerAcre * landSize);
+            const totalYield = (yieldPerAcre * landSize).toFixed(2);
             const totalProfit = (profitPerAcre * landSize);
 
-            // Prepare data for the chart
             labels.push(crop.crop);
             profitData.push(totalProfit);
 
-            // Generate HTML using your exact requested format
             html += `
-                <div class="result-item" style="margin-bottom: 30px; line-height: 1.8; font-size: 1.1em; color: #333; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
-                    <strong style="font-size: 1.4em; color: #2c3e50;">${crop.crop}</strong><br>
+                <div style="margin-bottom: 25px; line-height: 1.6; font-family: 'Segoe UI', sans-serif; color: #333; border-left: 5px solid #2ecc71; padding-left: 15px;">
+                    <strong style="font-size: 1.2em; color: #2c3e50;">${crop.crop}</strong><br>
                     Water Requirement: ${crop.water_need}<br>
                     Region: ${crop.region}<br>
                     Yield per acre: ${yieldPerAcre}<br>
                     Profit per acre: ₹${profitPerAcre.toLocaleString('en-IN')}<br>
-                    Total Yield: ${totalYield}<br>
-                    Total Profit: <span style="font-weight: bold; color: #27ae60;">₹${totalProfit.toLocaleString('en-IN')}</span>
+                    <strong>Total Yield: ${totalYield} tons</strong><br>
+                    <strong>Total Profit: <span style="color: #27ae60;">₹${totalProfit.toLocaleString('en-IN')}</span></strong>
                 </div>
-                <hr style="border: 0; border-top: 1px dashed #ccc; margin: 20px 0;">`;
+                <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">`;
         });
 
-        // 3. Add a container for the Bar Chart
+        // 3. Add the Chart Container
         html += `
-            <div style="margin-top: 40px; padding: 20px; background: #fff; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-                <h3 style="text-align: center; color: #2c3e50; margin-bottom: 20px;">Profit Comparison Across Crops</h3>
+            <div style="margin-top: 30px; background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+                <h3 style="text-align: center; color: #2c3e50;">Profit Analysis</h3>
                 <canvas id="resultsChart"></canvas>
             </div>`;
 
         resultsDiv.innerHTML = html;
 
-        // 4. Initialize Chart.js
+        // 4. Initialize the Bar Chart
         const ctx = document.getElementById('resultsChart').getContext('2d');
-        if (myChart) myChart.destroy(); // Destroy previous chart to avoid overlay issues
+        if (myChart) myChart.destroy();
 
         myChart = new Chart(ctx, {
             type: 'bar',
@@ -128,15 +102,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     data: profitData,
                     backgroundColor: 'rgba(46, 204, 113, 0.7)',
                     borderColor: '#27ae60',
-                    borderWidth: 2,
-                    borderRadius: 5
+                    borderWidth: 1
                 }]
             },
             options: {
                 responsive: true,
-                plugins: {
-                    legend: { display: false }
-                },
                 scales: {
                     y: { 
                         beginAtZero: true,
