@@ -1,64 +1,54 @@
-// ===== Configuration =====
 const API_URL = 'https://agridrop-vxci.onrender.com';
 
 document.addEventListener('DOMContentLoaded', () => {
-    // ===== Navigation Logic =====
-    const sliderContainer = document.querySelector('.slider-container');
-    const appContainer = document.querySelector('.app-container');
-    const enterAppBtn = document.getElementById('enterApp');
+    // === Slider & Navigation ===
+    const slides = document.querySelectorAll('.slide');
+    let currentSlide = 0;
 
-    if (enterAppBtn) {
-        enterAppBtn.addEventListener('click', () => {
-            sliderContainer.style.display = 'none';
-            appContainer.style.display = 'block';
-            window.scrollTo(0, 0);
-        });
-    }
+    setInterval(() => {
+        slides[currentSlide].classList.remove('active');
+        currentSlide = (currentSlide + 1) % slides.length;
+        slides[currentSlide].classList.add('active');
+    }, 5000);
 
-    // ===== Form Submission & API Integration =====
+    document.getElementById('enterApp').addEventListener('click', () => {
+        document.getElementById('sliderSection').style.display = 'none';
+        document.getElementById('appSection').style.display = 'block';
+    });
+
+    // === Form Logic ===
     const cropForm = document.getElementById('cropForm');
     const resultsDiv = document.getElementById('results');
     let myChart = null;
 
-    if (cropForm) {
-        cropForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
+    cropForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        resultsDiv.innerHTML = `<p style="color: #27ae60; font-weight: bold;">Connecting to server...</p>`;
 
-            // Clear previous errors and show loading message
-            resultsDiv.innerHTML = `<p style="color: #27ae60; font-weight: bold; padding: 10px;">Connecting to server... Please wait.</p>`;
+        const region = document.getElementById('region').value;
+        const water = document.getElementById('water').value;
+        const landSize = parseFloat(document.getElementById('landSize').value) || 1;
 
-            const region = document.getElementById('region').value;
-            const water = document.getElementById('water').value;
-            const landSize = parseFloat(document.getElementById('landSize').value) || 1;
+        try {
+            const response = await fetch(`${API_URL}/recommend?water=${water}&region=${region}&land=${landSize}`);
+            const data = await response.json();
+            displayResults(data, landSize);
+        } catch (err) {
+            resultsDiv.innerHTML = `<p style="color:red;">Error: Database connection failed.</p>`;
+        }
+    });
 
-            try {
-                const response = await fetch(`${API_URL}/recommend?water=${water}&region=${region}&land=${landSize}`);
-                
-                if (!response.ok) throw new Error("Backend server error");
-
-                const data = await response.json();
-                displayResults(data, landSize);
-            } catch (err) {
-                console.error("Connection Error:", err);
-                resultsDiv.innerHTML = `<p style="color:red; padding: 10px;">Error: Cannot connect to the database. Ensure the backend is live.</p>`;
-            }
-        });
-    }
-
-    // ===== Detailed Display Logic & Charting =====
+    // EXACT displayResults logic from your code
     function displayResults(crops, landSize) {
         if (!crops || crops.length === 0) {
-            resultsDiv.innerHTML = `<p style="padding: 10px;">No matching crops found for this selection.</p>`;
+            resultsDiv.innerHTML = `<p>No matching crops found.</p>`;
             return;
         }
 
-        // 1. Text Output Header
         let html = `<h2 style="color: #2c3e50; border-bottom: 2px solid #27ae60; padding-bottom: 10px;">Recommended Crops for ${landSize} acre(s):</h2>`;
         const labels = [], profitData = [];
 
-        // 2. Build the detailed text list
         crops.forEach(crop => {
-            // Ensure numbers for calculations
             const yieldPerAcre = Number(crop.yield_per_acre);
             const profitPerAcre = Number(crop.profit_per_acre);
             const totalYield = (yieldPerAcre * landSize).toFixed(2);
@@ -80,41 +70,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">`;
         });
 
-        // 3. Add the Chart Container
-        html += `
-            <div style="margin-top: 30px; background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
-                <h3 style="text-align: center; color: #2c3e50;">Profit Analysis</h3>
-                <canvas id="resultsChart"></canvas>
-            </div>`;
-
+        html += `<canvas id="resultsChart" style="margin-top: 30px;"></canvas>`;
         resultsDiv.innerHTML = html;
 
-        // 4. Initialize the Bar Chart
         const ctx = document.getElementById('resultsChart').getContext('2d');
         if (myChart) myChart.destroy();
-
         myChart = new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: labels,
-                datasets: [{
-                    label: 'Total Profit (₹)',
-                    data: profitData,
-                    backgroundColor: 'rgba(46, 204, 113, 0.7)',
-                    borderColor: '#27ae60',
-                    borderWidth: 1
+                datasets: [{ 
+                    label: 'Total Profit (₹)', 
+                    data: profitData, 
+                    backgroundColor: 'rgba(46, 204, 113, 0.7)', 
+                    borderColor: '#27ae60', 
+                    borderWidth: 1 
                 }]
             },
             options: {
                 responsive: true,
-                scales: {
-                    y: { 
-                        beginAtZero: true,
-                        ticks: {
-                            callback: function(value) { return '₹' + value.toLocaleString('en-IN'); }
-                        }
-                    }
-                }
+                scales: { y: { beginAtZero: true } }
             }
         });
     }
