@@ -1,4 +1,5 @@
 // ===== Configuration =====
+// This matches your live Render service exactly.
 const API_URL = 'https://agridrop-vxci.onrender.com';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -40,14 +41,15 @@ document.addEventListener('DOMContentLoaded', () => {
         cropForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            // Clear previous errors and show loading
-            resultsDiv.innerHTML = `<p style="color: #27ae60; font-weight: bold;">Fetching data from server...</p>`;
+            // Clear previous results and show loading status
+            resultsDiv.innerHTML = `<p style="color: #27ae60; font-weight: bold;">Connecting to Agridrop server... Please wait.</p>`;
 
             const region = document.getElementById('region').value;
             const water = document.getElementById('water').value;
             const landSize = parseFloat(document.getElementById('landSize').value) || 1;
 
             try {
+                // Fetch recommendations from your live Render backend
                 const response = await fetch(`${API_URL}/recommend?water=${water}&region=${region}&land=${landSize}`);
                 
                 if (!response.ok) throw new Error("Backend server error");
@@ -55,8 +57,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = await response.json();
                 displayResults(data, landSize);
             } catch (err) {
-                console.error("Fetch error:", err);
-                resultsDiv.innerHTML = `<p style="color:red;">Error: Cannot connect to the database. Ensure the backend at ${API_URL} is live.</p>`;
+                console.error("Connection Error:", err);
+                resultsDiv.innerHTML = `<p style="color:red;">Error: Cannot connect to the database. Make sure the backend is awake.</p>`;
             }
         });
     }
@@ -68,28 +70,31 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        let html = `<h3>Results for ${landSize} Acre(s):</h3><div class="crop-cards">`;
+        let html = `<h3>Recommended Crops for ${landSize} Acre(s):</h3><div class="crop-cards">`;
         const labels = [], profitData = [];
 
         crops.forEach(crop => {
             labels.push(crop.crop);
             profitData.push(crop.total_profit);
 
-            // FIX: Convert values to Numbers so .toFixed and .toLocaleString work correctly
+            // FIX: Convert values to Numbers so .toFixed(2) and .toLocaleString() work
+            // This prevents the "toFixed is not a function" error
             const yieldValue = Number(crop.total_yield).toFixed(2);
             const profitValue = Number(crop.total_profit).toLocaleString('en-IN');
 
             html += `
-                <div class="crop-card" style="border:1px solid #ddd; padding:15px; border-radius:8px; background:#fff; margin-bottom:10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                    <h4>${crop.crop}</h4>
-                    <p><strong>Yield:</strong> ${yieldValue} tons</p>
-                    <p style="color: #27ae60;"><strong>Profit:</strong> ₹${profitValue}</p>
+                <div class="crop-card" style="border:1px solid #ddd; padding:15px; border-radius:8px; background:#fff; margin-bottom:15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                    <h4 style="margin-top:0; color:#2c3e50;">${crop.crop}</h4>
+                    <p><strong>Total Yield:</strong> ${yieldValue} tons</p>
+                    <p style="color: #27ae60; font-size: 1.1em;"><strong>Projected Profit:</strong> ₹${profitValue}</p>
+                    <small style="color:#7f8c8d;">Region: ${crop.region} | Water: ${crop.water_need}</small>
                 </div>`;
         });
 
-        html += `</div><canvas id="resultsChart" style="margin-top:20px;"></canvas>`;
+        html += `</div><canvas id="resultsChart" style="margin-top:30px;"></canvas>`;
         resultsDiv.innerHTML = html;
 
+        // Create the bar chart using Chart.js
         const ctx = document.getElementById('resultsChart').getContext('2d');
         if (myChart) myChart.destroy();
 
@@ -98,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
             data: {
                 labels: labels,
                 datasets: [{
-                    label: 'Projected Profit (₹)',
+                    label: 'Profit (₹)',
                     data: profitData,
                     backgroundColor: '#2ecc71',
                     borderColor: '#27ae60',
@@ -108,7 +113,12 @@ document.addEventListener('DOMContentLoaded', () => {
             options: {
                 responsive: true,
                 scales: {
-                    y: { beginAtZero: true }
+                    y: { 
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) { return '₹' + value.toLocaleString(); }
+                        }
+                    }
                 }
             }
         });
