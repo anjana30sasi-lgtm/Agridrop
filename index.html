@@ -4,9 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Agridrop | Smart Crop Planning</title>
-  
   <link rel="stylesheet" href="style.css">
-  
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -16,32 +14,18 @@
       <h1>Welcome to Agridrop</h1>
       <p>Empowering farmers with data-driven crop choices</p>
     </div>
-
     <div class="slides">
       <div class="slide active">
         <img src="images/millet.webp" alt="Millets">
         <div class="caption">Low water crops like Millets help conserve resources.</div>
       </div>
-      <div class="slide">
-        <img src="images/OIP.jpeg" alt="Maize">
-        <div class="caption">High-yield crops like Maize for better profitability.</div>
-      </div>
-      <div class="slide">
-        <img src="images/impact.jpg" alt="Sustainability">
-        <div class="caption">Plan today for a sustainable agricultural tomorrow.</div>
-      </div>
     </div>
-
-    <button class="prev" aria-label="Previous Slide">&#10094;</button>
-    <button class="next" aria-label="Next Slide">&#10095;</button>
-
     <div class="enter-app" id="enterApp">🌱 Start Planning Your Crops</div>
   </div>
 
   <div class="app-container" style="display:none;">
     <div class="app-card">
-      <h2>Crop Recommendation Engine</h2>
-      
+      <h2 class="app-title">Agridrop – Water-Efficient Crop Planner</h2>
       
       <form id="cropForm">
         <div class="form-group">
@@ -59,15 +43,15 @@
           <label for="water">Water Availability:</label>
           <select id="water" required>
             <option value="">Select Level</option>
-            <option value="Low">Low (Rainfed)</option>
-            <option value="Medium">Medium (Borewell)</option>
-            <option value="High">High (Canal/River)</option>
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
           </select>
         </div>
 
         <div class="form-group">
-          <label for="landSize">Land Size (Acres):</label>
-          <input type="number" id="landSize" placeholder="e.g. 2.5" min="0.1" step="0.1" required>
+          <label for="landSize">Land Size (in acres):</label>
+          <input type="number" id="landSize" placeholder="5" min="0.1" step="0.1" required>
         </div>
 
         <button type="submit" class="submit-btn">Get Recommendations</button>
@@ -80,4 +64,3 @@
   <script src="app (1).js"></script>
 </body>
 </html>
-
