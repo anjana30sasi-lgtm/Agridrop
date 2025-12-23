@@ -9,31 +9,38 @@
 </head>
 <body>
 
-    <div class="wrapper">
-        <div id="landingPage" class="card">
-            <div class="slider">
-                <div class="slide active">
-                    <img src="images/millet.webp" alt="Millet">
-                    <div class="overlay"><h1>Welcome to Agridrop</h1></div>
+    <div class="mobile-container">
+        <div id="landingPage" class="main-card">
+            <div class="slider-box">
+                <div class="slides">
+                    <div class="slide active">
+                        <img src="images/millet.webp" alt="Millet">
+                        <div class="overlay-text">
+                            <h1>Welcome to Agridrop</h1>
+                            <p>Your smart guide to water-efficient crops</p>
+                            <span>Low water crops like Millets save water.</span>
+                        </div>
+                    </div>
+                    <div class="slide">
+                        <img src="images/OIP.jpeg" alt="Maize">
+                        <div class="overlay-text">
+                            <h1>Maximize Profit</h1>
+                            <p>Plan better harvests for your land</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="slide">
-                    <img src="images/OIP.jpeg" alt="Maize">
-                    <div class="overlay"><h1>Maximize Profit</h1></div>
-                </div>
-                <div class="slide">
-                    <img src="images/impact.jpg" alt="Sustainability">
-                    <div class="overlay"><h1>Smart Farming</h1></div>
-                </div>
+                <div class="nav-arrow left">&#10094;</div>
+                <div class="nav-arrow right">&#10095;</div>
             </div>
-            <div class="footer">
+            <div class="button-area">
                 <button id="startBtn" class="btn-green">🌱 Start Planning Your Crops</button>
             </div>
         </div>
 
-        <div id="formPage" class="card form-padding" style="display:none;">
-            <h2 class="heading-green">Crop Planner</h2>
+        <div id="formPage" class="main-card form-content" style="display:none;">
+            <h2 class="form-title">Crop Planner</h2>
             <form id="cropForm">
-                <div class="group">
+                <div class="input-group">
                     <label>Region:</label>
                     <select id="region" required>
                         <option value="South India">South India</option>
@@ -42,19 +49,19 @@
                         <option value="West India">West India</option>
                     </select>
                 </div>
-                <div class="group">
-                    <label>Water:</label>
+                <div class="input-group">
+                    <label>Water Availability:</label>
                     <select id="water" required>
                         <option value="Low">Low</option>
                         <option value="Medium">Medium</option>
                         <option value="High">High</option>
                     </select>
                 </div>
-                <div class="group">
+                <div class="input-group">
                     <label>Land (Acres):</label>
                     <input type="number" id="landSize" value="5" step="0.1" required>
                 </div>
-                <button type="submit" class="btn-green">Get Recommendations</button>
+                <button type="submit" class="btn-green-wide">Get Recommendations</button>
             </form>
             
             <div id="resultsArea"></div>
