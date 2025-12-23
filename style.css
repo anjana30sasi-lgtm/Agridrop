@@ -2,11 +2,12 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Segoe UI', sans-serif;
 }
 
 body {
-    background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%);
+    /* Soft green gradient background from your screenshot */
+    background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -16,50 +17,52 @@ body {
 
 .app-container {
     width: 100%;
-    max-width: 500px;
+    max-width: 550px;
 }
 
 .app-card {
-    background: rgba(255, 255, 255, 0.9);
-    padding: 30px;
-    border-radius: 20px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    background: white;
+    padding: 40px;
+    border-radius: 30px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.08);
 }
 
 .app-title {
-    color: #2d6a4f;
+    color: #2e7d32;
     text-align: center;
-    margin-bottom: 25px;
-    font-size: 1.5rem;
+    margin-bottom: 30px;
+    font-size: 1.6rem;
 }
 
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+    text-align: left; /* Ensures labels stay on the left */
 }
 
 label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: 600;
-    color: #444;
+    display: block; /* Forces the label to be on its own line above the box */
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #333;
 }
 
 select, input {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+    padding: 12px 15px;
+    border: 1px solid #999;
+    border-radius: 12px;
     font-size: 1rem;
+    background-color: #fff;
 }
 
 .submit-btn {
     width: 100%;
-    padding: 12px;
+    padding: 14px;
     background: #1b7a5a;
     color: white;
     border: none;
-    border-radius: 8px;
-    font-size: 1rem;
+    border-radius: 12px;
+    font-size: 1.1rem;
     font-weight: bold;
     cursor: pointer;
     margin-top: 10px;
@@ -69,9 +72,9 @@ select, input {
     background: #145c44;
 }
 
-.result-item {
-    margin-top: 20px;
-    padding: 10px;
-    background: #f0fdf4;
-    border-radius: 8px;
+/* Results Formatting */
+.results-section {
+    margin-top: 30px;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
 }
