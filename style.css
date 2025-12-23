@@ -1,45 +1,60 @@
+/* GLOBAL STYLES */
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
 
 body {
     background-color: #f0f7f8;
-    min-height: 100vh;
-    display: flex; justify-content: center; align-items: center; padding: 20px;
+    display: flex; justify-content: center; align-items: center;
+    min-height: 100vh; padding: 15px;
 }
 
-.wrapper { width: 100%; max-width: 500px; }
+.mobile-container { width: 100%; max-width: 420px; }
 
-.card {
-    background: white; border-radius: 30px; overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+/* SLIDER CARD */
+.main-card {
+    background: white; border-radius: 40px; overflow: hidden;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.1);
 }
 
-.slider { height: 320px; position: relative; width: 100%; }
+.slider-box { position: relative; height: 320px; width: 100%; }
 .slide { display: none; width: 100%; height: 100%; }
-.slide.active { display: block; animation: fade 1.2s; }
-.slide img { width: 100%; height: 100%; object-fit: cover; } /* Fixes stretching */
+.slide.active { display: block; animation: fade 1s; }
+.slide img { width: 100%; height: 100%; object-fit: cover; } /* No stretching */
 
-.overlay {
-    position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%);
-    color: white; text-align: center; text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+.overlay-text {
+    position: absolute; bottom: 0; left: 0; width: 100%; padding: 20px;
+    background: linear-gradient(transparent, rgba(0,0,0,0.8));
+    color: white; text-align: center;
 }
 
-.footer { padding: 30px; background: #e0f2f1; text-align: center; }
-.form-padding { padding: 35px; }
-.heading-green { color: #1b7a5a; margin-bottom: 25px; text-align: center; }
+.nav-arrow {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    background: rgba(255,255,255,0.3); color: white; padding: 12px;
+    border-radius: 50%; cursor: pointer; font-size: 18px; z-index: 10;
+}
+.left { left: 15px; } .right { right: 15px; }
 
-.group { margin-bottom: 18px; }
-label { display: block; margin-bottom: 8px; font-weight: bold; }
+/* BUTTONS */
+.button-area { padding: 30px; background: #e6f7f4; text-align: center; }
+.btn-green {
+    background: #1b7a5a; color: white; border: none; padding: 15px 30px;
+    border-radius: 50px; font-weight: bold; cursor: pointer;
+}
+
+.form-content { padding: 35px; }
+.form-title { color: #1b7a5a; margin-bottom: 20px; }
+.input-group { margin-bottom: 15px; }
+label { display: block; margin-bottom: 5px; font-weight: bold; }
 select, input { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #ddd; }
 
-.btn-green {
-    background: #1b7a5a; color: white; border: none; padding: 15px;
-    border-radius: 50px; cursor: pointer; font-weight: bold; width: 100%;
+.btn-green-wide {
+    width: 100%; background: #1b7a5a; color: white; border: none;
+    padding: 15px; border-radius: 15px; font-weight: bold; cursor: pointer;
 }
 
-/* Detailed result styling from the first version */
+/* DETAILED RESULTS */
 .result-block {
-    margin-top: 25px; line-height: 1.6; border-left: 5px solid #2ecc71;
-    padding-left: 15px; color: #333;
+    margin-top: 25px; padding: 15px; border-left: 5px solid #27ae60;
+    background: #fdfdfd; line-height: 1.6;
 }
 
-@keyframes fade { from {opacity: 0.4} to {opacity: 1} }
+@keyframes fade { from {opacity: 0.6} to {opacity: 1} }
