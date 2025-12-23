@@ -61,6 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // ===== Displaying Results & Charting =====
     function displayResults(crops, landSize) {
         if (!crops || crops.length === 0) {
             resultsDiv.innerHTML = `<p>No matching crops found for this selection.</p>`;
@@ -74,17 +75,23 @@ document.addEventListener('DOMContentLoaded', () => {
             labels.push(crop.crop);
             profitData.push(crop.total_profit);
 
+            // FIX: Convert strings to Numbers to prevent the .toFixed error
+            const yieldValue = Number(crop.total_yield).toFixed(2);
+            const profitValue = Number(crop.total_profit).toLocaleString();
+
             html += `
                 <div class="crop-card" style="border:1px solid #ddd; padding:15px; border-radius:8px; background:#fff; margin-bottom:10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
                     <h4>${crop.crop}</h4>
-                    <p><strong>Yield:</strong> ${crop.total_yield.toFixed(2)} tons</p>
-                    <p style="color: #27ae60;"><strong>Profit:</strong> ₹${crop.total_profit.toLocaleString()}</p>
+                    <p><strong>Yield:</strong> ${yieldValue} tons</p>
+                    <p style="color: #27ae60;"><strong>Profit:</strong> ₹${profitValue}</p>
+                    <small>Region: ${crop.region} | Water: ${crop.water_need}</small>
                 </div>`;
         });
 
-        html += `</div><canvas id="resultsChart"></canvas>`;
+        html += `</div><canvas id="resultsChart" style="margin-top:20px;"></canvas>`;
         resultsDiv.innerHTML = html;
 
+        // Create the visual chart using Chart.js
         const ctx = document.getElementById('resultsChart').getContext('2d');
         if (myChart) myChart.destroy();
 
@@ -95,8 +102,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 datasets: [{
                     label: 'Projected Profit (₹)',
                     data: profitData,
-                    backgroundColor: '#2ecc71'
+                    backgroundColor: '#2ecc71',
+                    borderColor: '#27ae60',
+                    borderWidth: 1
                 }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true }
+                }
             }
         });
     }
