@@ -1,7 +1,7 @@
 const API_URL = 'https://agridrop-vxci.onrender.com';
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Image Slider Logic (Scrolling 3 images)
+    // === Slider Auto-Scroll (3 Images) ===
     const slides = document.querySelectorAll('.slide');
     let currentSlide = 0;
 
@@ -11,21 +11,24 @@ document.addEventListener('DOMContentLoaded', () => {
         slides[currentSlide].classList.add('active');
     }, 5000);
 
-    // 2. Start Button Entry Logic
+    // === "Start Planning" Button Logic ===
     const enterAppBtn = document.getElementById('enterApp');
+    const landingSection = document.getElementById('landingSection');
+    const formSection = document.getElementById('formSection');
+
     enterAppBtn.addEventListener('click', () => {
-        document.getElementById('sliderSection').style.display = 'none';
-        document.getElementById('appSection').style.display = 'block';
+        landingSection.style.display = 'none'; // Hides slider
+        formSection.style.display = 'block';   // Shows entry fields
     });
 
-    // 3. Form & Results Logic (Your exact logic)
+    // === Form Submission (Your exact displayResults logic) ===
     const cropForm = document.getElementById('cropForm');
     const resultsDiv = document.getElementById('results');
     let myChart = null;
 
     cropForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        resultsDiv.innerHTML = `<p style="color: #27ae60; font-weight: bold;">Loading...</p>`;
+        resultsDiv.innerHTML = `<p style="color: #27ae60; font-weight: bold;">Connecting...</p>`;
         
         const region = document.getElementById('region').value;
         const water = document.getElementById('water').value;
@@ -36,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
             displayResults(data, landSize);
         } catch (err) {
-            resultsDiv.innerHTML = `<p style="color:red;">Error: Database connection failed.</p>`;
+            resultsDiv.innerHTML = `<p style="color:red;">Error: Backend connection failed.</p>`;
         }
     });
 
@@ -45,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
             resultsDiv.innerHTML = `<p>No matching crops found.</p>`;
             return;
         }
-        // Exact formatting from your preferred version
+
         let html = `<h2 style="color: #2c3e50; border-bottom: 2px solid #27ae60; padding-bottom: 10px;">Recommended Crops for ${landSize} acre(s):</h2>`;
         const labels = [], profitData = [];
 
