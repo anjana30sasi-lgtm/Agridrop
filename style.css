@@ -18,38 +18,33 @@ body {
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
 
-/* Header Image Fix */
-.slider-header { position: relative; height: 350px; }
+/* Image Slider Fix */
+.slider-container { height: 350px; position: relative; }
 .slide { display: none; width: 100%; height: 100%; position: relative; }
 .slide.active { display: block; animation: fade 1s; }
+.slide img { width: 100%; height: 100%; object-fit: cover; }
 
-.slide img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* Prevents stretching seen in image_c83f6c */
-}
-
-.header-text {
+.header-overlay {
     position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%);
     text-align: center; color: white; width: 90%; text-shadow: 0 2px 8px rgba(0,0,0,0.7);
 }
 
-.image-label {
+.bottom-label {
     position: absolute; bottom: 0; width: 100%; background: rgba(0,0,0,0.3);
     color: white; padding: 10px; text-align: center; font-size: 0.85rem;
 }
 
-/* Form Styles */
-.form-view { padding: 40px; }
-.form-title { color: #2e7d32; text-align: center; margin-bottom: 25px; }
-.input-group { margin-bottom: 20px; }
+/* Buttons and Form */
+.button-footer { padding: 25px; background: #e0f2f1; text-align: center; }
+.start-btn, .submit-btn {
+    background: #1b7a5a; color: white; border: none; padding: 15px 30px;
+    border-radius: 50px; font-weight: bold; cursor: pointer; font-size: 1rem;
+}
+
+.app-view { padding: 40px; }
+.title { color: #2e7d32; text-align: center; margin-bottom: 25px; }
+.form-group { margin-bottom: 20px; }
 label { display: block; margin-bottom: 8px; font-weight: 500; }
 select, input { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #1b7a5a; }
-
-.card-footer { padding: 25px; background: #e0f2f1; text-align: center; }
-.start-btn, .submit-btn {
-    display: inline-block; background: #1b7a5a; color: white; border: none;
-    padding: 15px 30px; border-radius: 50px; font-weight: bold; cursor: pointer;
-}
 
 @keyframes fade { from { opacity: 0.4; } to { opacity: 1; } }
