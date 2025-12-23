@@ -1,34 +1,36 @@
 const API_URL = 'https://agridrop-vxci.onrender.com';
 
 document.addEventListener('DOMContentLoaded', () => {
-    // === Slider Auto-Scroll (3 Images) ===
-    const slides = document.querySelectorAll('.slide');
+    // 1. AUTO-SCROLL LOGIC (The 3 images)
     let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
 
-    setInterval(() => {
+    function rotateSlides() {
         slides[currentSlide].classList.remove('active');
         currentSlide = (currentSlide + 1) % slides.length;
         slides[currentSlide].classList.add('active');
-    }, 5000);
+    }
+    setInterval(rotateSlides, 4000); // Changes image every 4 seconds
 
-    // === "Start Planning" Button Logic ===
+    // 2. ENTRY BUTTON LOGIC
     const enterAppBtn = document.getElementById('enterApp');
     const landingSection = document.getElementById('landingSection');
     const formSection = document.getElementById('formSection');
 
     enterAppBtn.addEventListener('click', () => {
-        landingSection.style.display = 'none'; // Hides slider
-        formSection.style.display = 'block';   // Shows entry fields
+        landingSection.style.display = 'none'; // Hides the slider
+        formSection.style.display = 'block';   // Reveals the form
+        window.scrollTo(0, 0);
     });
 
-    // === Form Submission (Your exact displayResults logic) ===
+    // 3. FORM & RESULTS LOGIC
     const cropForm = document.getElementById('cropForm');
     const resultsDiv = document.getElementById('results');
     let myChart = null;
 
     cropForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        resultsDiv.innerHTML = `<p style="color: #27ae60; font-weight: bold;">Connecting...</p>`;
+        resultsDiv.innerHTML = `<p style="color: #27ae60; font-weight: bold; padding-top: 20px;">Fetching expert advice...</p>`;
         
         const region = document.getElementById('region').value;
         const water = document.getElementById('water').value;
@@ -39,17 +41,18 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
             displayResults(data, landSize);
         } catch (err) {
-            resultsDiv.innerHTML = `<p style="color:red;">Error: Backend connection failed.</p>`;
+            resultsDiv.innerHTML = `<p style="color:red; padding-top: 20px;">Error: Cannot connect to the database.</p>`;
         }
     });
 
+    // Exact Result Layout from your preferred version
     function displayResults(crops, landSize) {
         if (!crops || crops.length === 0) {
-            resultsDiv.innerHTML = `<p>No matching crops found.</p>`;
+            resultsDiv.innerHTML = `<p style="padding-top: 20px;">No matching crops found.</p>`;
             return;
         }
 
-        let html = `<h2 style="color: #2c3e50; border-bottom: 2px solid #27ae60; padding-bottom: 10px;">Recommended Crops for ${landSize} acre(s):</h2>`;
+        let html = `<h2 style="color: #2c3e50; border-bottom: 2px solid #27ae60; padding: 20px 0 10px 0;">Recommended Crops for ${landSize} acre(s):</h2>`;
         const labels = [], profitData = [];
 
         crops.forEach(crop => {
@@ -62,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
             profitData.push(totalProfit);
 
             html += `
-                <div style="margin-bottom: 25px; line-height: 1.6; font-family: 'Segoe UI', sans-serif; color: #333; border-left: 5px solid #2ecc71; padding-left: 15px;">
+                <div style="margin-bottom: 25px; line-height: 1.6; border-left: 5px solid #2ecc71; padding-left: 15px; margin-top: 20px;">
                     <strong style="font-size: 1.2em; color: #2c3e50;">${crop.crop}</strong><br>
                     Water Requirement: ${crop.water_need}<br>
                     Region: ${crop.region}<br>
@@ -83,7 +86,13 @@ document.addEventListener('DOMContentLoaded', () => {
             type: 'bar',
             data: {
                 labels: labels,
-                datasets: [{ label: 'Profit (₹)', data: profitData, backgroundColor: 'rgba(46, 204, 113, 0.7)', borderColor: '#27ae60', borderWidth: 1 }]
+                datasets: [{ 
+                    label: 'Profit (₹)', 
+                    data: profitData, 
+                    backgroundColor: 'rgba(46, 204, 113, 0.7)', 
+                    borderColor: '#27ae60', 
+                    borderWidth: 1 
+                }]
             }
         });
     }
