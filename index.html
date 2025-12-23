@@ -28,9 +28,16 @@
                             <p>Plan better harvests for your land</p>
                         </div>
                     </div>
+                    <div class="slide">
+                        <img src="images/impact.jpg" alt="Impact">
+                        <div class="overlay-text">
+                            <h1>Smart Farming</h1>
+                            <p>Sustainable solutions for farmers</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="nav-arrow left">&#10094;</div>
-                <div class="nav-arrow right">&#10095;</div>
+                <div class="nav-arrow left" id="prevSlide">&#10094;</div>
+                <div class="nav-arrow right" id="nextSlide">&#10095;</div>
             </div>
             <div class="button-area">
                 <button id="startBtn" class="btn-green">🌱 Start Planning Your Crops</button>
@@ -45,16 +52,13 @@
                     <select id="region" required>
                         <option value="South India">South India</option>
                         <option value="North India">North India</option>
-                        <option value="East India">East India</option>
-                        <option value="West India">West India</option>
                     </select>
                 </div>
                 <div class="input-group">
-                    <label>Water Availability:</label>
+                    <label>Water:</label>
                     <select id="water" required>
                         <option value="Low">Low</option>
                         <option value="Medium">Medium</option>
-                        <option value="High">High</option>
                     </select>
                 </div>
                 <div class="input-group">
