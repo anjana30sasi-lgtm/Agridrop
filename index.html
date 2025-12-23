@@ -4,68 +4,105 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agridrop | Smart Crop Planning</title>
-    <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* CSS STYLES - Fixes the "Large Image" problem */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        
+        body {
+            background-color: #f0f7f8;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .wrapper { width: 100%; max-width: 500px; } /* Controls card size */
+
+        .card {
+            background: white;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        /* Fixed Image Size & Scrolling */
+        .slider { height: 300px; position: relative; width: 100%; background: #eee; }
+        .slide { display: none; width: 100%; height: 100%; }
+        .slide.active { display: block; animation: fade 1s; }
+        .slide img { 
+            width: 100%; height: 100%; 
+            object-fit: cover; /* PREVENTS LARGE/STRETCHED IMAGES */
+        }
+
+        .overlay {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            color: white; width: 90%; text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+        }
+
+        /* The Green Button */
+        .footer { padding: 30px; background: #e0f2f1; }
+        .btn-start {
+            background: #1b7a5a; color: white; border: none; padding: 15px 30px;
+            border-radius: 50px; cursor: pointer; font-weight: bold; font-size: 1rem;
+        }
+
+        /* Form Styling */
+        .form-padding { padding: 30px; text-align: left; }
+        .group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        select, input { width: 100%; padding: 10px; border-radius: 10px; border: 1px solid #ccc; }
+        
+        .btn-submit { width: 100%; background: #1b7a5a; color: white; border: none; padding: 12px; border-radius: 10px; cursor: pointer; }
+
+        @keyframes fade { from {opacity: 0.4} to {opacity: 1} }
+    </style>
 </head>
 <body>
 
     <div class="wrapper">
         <div id="landingSection" class="card">
             <div class="slider">
-                <div class="slides">
-                    <div class="slide active">
-                        <img src="images/millet.webp" alt="Millet">
-                        <div class="overlay">
-                            <h1>Welcome to Agridrop</h1>
-                            <p>Your smart guide to water-efficient crops</p>
-                        </div>
-                    </div>
-                    <div class="slide">
-                        <img src="images/OIP.jpeg" alt="Maize">
-                        <div class="overlay">
-                            <h1>Maximize Your Profit</h1>
-                            <p>Smart choices for sustainable farming</p>
-                        </div>
-                    </div>
-                    <div class="slide">
-                        <img src="images/impact.jpg" alt="Sustainability">
-                        <div class="overlay">
-                            <h1>Efficient Planning</h1>
-                            <p>Better tools for a better harvest</p>
-                        </div>
-                    </div>
+                <div class="slide active">
+                    <img src="images/millet.webp" alt="Millet">
+                    <div class="overlay"><h1>Welcome to Agridrop</h1></div>
+                </div>
+                <div class="slide">
+                    <img src="images/OIP.jpeg" alt="Maize">
+                    <div class="overlay"><h1>Maximize Profit</h1></div>
+                </div>
+                <div class="slide">
+                    <img src="images/impact.jpg" alt="Impact">
+                    <div class="overlay"><h1>Smart Farming</h1></div>
                 </div>
             </div>
             <div class="footer">
-                <button id="enterApp" class="btn-primary">🌱 Start Planning Your Crops</button>
+                <button id="enterApp" class="btn-start">🌱 Start Planning Your Crops</button>
             </div>
         </div>
 
-        <div id="formSection" class="card form-container" style="display:none;">
-            <h2>Agridrop Crop Planner</h2>
+        <div id="formSection" class="card form-padding" style="display:none;">
+            <h2 style="color: #1b7a5a; margin-bottom: 20px;">Crop Planner</h2>
             <form id="cropForm">
                 <div class="group">
                     <label>Region:</label>
                     <select id="region" required>
-                        <option value="">Select Region</option>
-                        <option>South India</option>
-                        <option>North India</option>
-                        <option>East India</option>
-                        <option>West India</option>
+                        <option value="South India">South India</option>
+                        <option value="North India">North India</option>
                     </select>
                 </div>
                 <div class="group">
-                    <label>Water Availability:</label>
+                    <label>Water:</label>
                     <select id="water" required>
-                        <option value="">Select Level</option>
-                        <option>Low</option>
-                        <option>Medium</option>
-                        <option>High</option>
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
                     </select>
                 </div>
                 <div class="group">
-                    <label>Land Size (Acres):</label>
-                    <input type="number" id="landSize" value="5" step="0.1" required>
+                    <label>Land (Acres):</label>
+                    <input type="number" id="landSize" value="5" required>
                 </div>
                 <button type="submit" class="btn-submit">Get Recommendations</button>
             </form>
@@ -73,6 +110,45 @@
         </div>
     </div>
 
-    <script src="app.js"></script>
+    <script>
+        // JAVASCRIPT - Fixes scrolling and button
+        const API_URL = 'https://agridrop-vxci.onrender.com';
+
+        // 1. Scrolling Logic
+        let slideIdx = 0;
+        const slides = document.querySelectorAll('.slide');
+        function rotate() {
+            slides.forEach(s => s.classList.remove('active'));
+            slideIdx = (slideIdx + 1) % slides.length;
+            slides[slideIdx].classList.add('active');
+        }
+        setInterval(rotate, 3000); // 3 seconds per image
+
+        // 2. Button Logic (Opens the details field)
+        document.getElementById('enterApp').addEventListener('click', () => {
+            document.getElementById('landingSection').style.display = 'none';
+            document.getElementById('formSection').style.display = 'block';
+        });
+
+        // 3. Form Logic
+        document.getElementById('cropForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const resDiv = document.getElementById('results');
+            resDiv.innerHTML = "Loading...";
+
+            const region = document.getElementById('region').value;
+            const water = document.getElementById('water').value;
+            const land = document.getElementById('landSize').value;
+
+            try {
+                const response = await fetch(`${API_URL}/recommend?water=${water}&region=${region}&land=${land}`);
+                const data = await response.json();
+                // Your exact display logic here...
+                resDiv.innerHTML = "Successfully fetched " + data.length + " crops.";
+            } catch (err) {
+                resDiv.innerHTML = "Error connecting to server.";
+            }
+        });
+    </script>
 </body>
 </html>
