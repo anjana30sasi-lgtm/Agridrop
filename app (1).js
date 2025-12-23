@@ -1,36 +1,31 @@
 const API_URL = 'https://agridrop-vxci.onrender.com';
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. AUTO-SCROLL LOGIC (The 3 images)
-    let currentSlide = 0;
+    // 1. Image Rotation Logic
+    let current = 0;
     const slides = document.querySelectorAll('.slide');
+    
+    setInterval(() => {
+        slides[current].classList.remove('active');
+        current = (current + 1) % slides.length;
+        slides[current].classList.add('active');
+    }, 4000);
 
-    function rotateSlides() {
-        slides[currentSlide].classList.remove('active');
-        currentSlide = (currentSlide + 1) % slides.length;
-        slides[currentSlide].classList.add('active');
-    }
-    setInterval(rotateSlides, 4000); // Changes image every 4 seconds
-
-    // 2. ENTRY BUTTON LOGIC
-    const enterAppBtn = document.getElementById('enterApp');
-    const landingSection = document.getElementById('landingSection');
-    const formSection = document.getElementById('formSection');
-
-    enterAppBtn.addEventListener('click', () => {
-        landingSection.style.display = 'none'; // Hides the slider
-        formSection.style.display = 'block';   // Reveals the form
-        window.scrollTo(0, 0);
+    // 2. Start Button Click Logic
+    const startBtn = document.getElementById('enterApp');
+    startBtn.addEventListener('click', () => {
+        document.getElementById('landingSection').style.display = 'none';
+        document.getElementById('formSection').style.display = 'block';
     });
 
-    // 3. FORM & RESULTS LOGIC
+    // 3. Form Submission and Results Logic
     const cropForm = document.getElementById('cropForm');
     const resultsDiv = document.getElementById('results');
     let myChart = null;
 
     cropForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        resultsDiv.innerHTML = `<p style="color: #27ae60; font-weight: bold; padding-top: 20px;">Fetching expert advice...</p>`;
+        resultsDiv.innerHTML = `<p style="color: #27ae60; font-weight: bold; margin-top: 20px;">Finding crops...</p>`;
         
         const region = document.getElementById('region').value;
         const water = document.getElementById('water').value;
@@ -41,43 +36,32 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
             displayResults(data, landSize);
         } catch (err) {
-            resultsDiv.innerHTML = `<p style="color:red; padding-top: 20px;">Error: Cannot connect to the database.</p>`;
+            resultsDiv.innerHTML = `<p style="color:red; margin-top: 20px;">Server Error.</p>`;
         }
     });
 
-    // Exact Result Layout from your preferred version
     function displayResults(crops, landSize) {
         if (!crops || crops.length === 0) {
-            resultsDiv.innerHTML = `<p style="padding-top: 20px;">No matching crops found.</p>`;
+            resultsDiv.innerHTML = `<p>No matching crops found.</p>`;
             return;
         }
 
-        let html = `<h2 style="color: #2c3e50; border-bottom: 2px solid #27ae60; padding: 20px 0 10px 0;">Recommended Crops for ${landSize} acre(s):</h2>`;
+        let html = `<h3 style="margin-top: 20px;">Recommendations for ${landSize} Acre(s):</h3>`;
         const labels = [], profitData = [];
 
         crops.forEach(crop => {
-            const yieldPerAcre = Number(crop.yield_per_acre);
-            const profitPerAcre = Number(crop.profit_per_acre);
-            const totalYield = (yieldPerAcre * landSize).toFixed(2);
-            const totalProfit = (profitPerAcre * landSize);
-
+            const totalProfit = crop.profit_per_acre * landSize;
             labels.push(crop.crop);
             profitData.push(totalProfit);
 
             html += `
-                <div style="margin-bottom: 25px; line-height: 1.6; border-left: 5px solid #2ecc71; padding-left: 15px; margin-top: 20px;">
-                    <strong style="font-size: 1.2em; color: #2c3e50;">${crop.crop}</strong><br>
-                    Water Requirement: ${crop.water_need}<br>
-                    Region: ${crop.region}<br>
-                    Yield per acre: ${yieldPerAcre}<br>
-                    Profit per acre: ₹${profitPerAcre.toLocaleString('en-IN')}<br>
-                    <strong>Total Yield: ${totalYield} tons</strong><br>
-                    <strong>Total Profit: <span style="color: #27ae60;">₹${totalProfit.toLocaleString('en-IN')}</span></strong>
-                </div>
-                <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">`;
+                <div style="margin-top: 15px; border-left: 4px solid #27ae60; padding-left: 10px;">
+                    <strong>${crop.crop}</strong><br>
+                    Profit: ₹${totalProfit.toLocaleString('en-IN')}
+                </div>`;
         });
 
-        html += `<canvas id="resultsChart" style="margin-top: 30px;"></canvas>`;
+        html += `<canvas id="resultsChart" style="margin-top: 20px;"></canvas>`;
         resultsDiv.innerHTML = html;
 
         const ctx = document.getElementById('resultsChart').getContext('2d');
@@ -86,13 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
             type: 'bar',
             data: {
                 labels: labels,
-                datasets: [{ 
-                    label: 'Profit (₹)', 
-                    data: profitData, 
-                    backgroundColor: 'rgba(46, 204, 113, 0.7)', 
-                    borderColor: '#27ae60', 
-                    borderWidth: 1 
-                }]
+                datasets: [{ label: 'Profit (₹)', data: profitData, backgroundColor: '#27ae60' }]
             }
         });
     }
