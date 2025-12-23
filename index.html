@@ -1,84 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agridrop | Smart Crop Planning</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to Agridrop</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
-    <div id="landingPage" class="container">
-        <div class="card slider-card">
-            <div class="slider">
-                <div class="slide active">
-                    <img src="images/millet.webp" alt="Millets">
-                    <div class="overlay-text">
-                        <h1>Welcome to Agridrop</h1>
-                        <p>Your smart guide to water-efficient crops</p>
-                    </div>
-                    <div class="caption-bar">Low water crops like Millets save water.</div>
-                </div>
-                <div class="slide">
-                    <img src="images/maize.jpg" alt="Maize">
-                    <div class="overlay-text">
-                        <h1>Maximize Your Yield</h1>
-                        <p>Data-driven choices for every season</p>
-                    </div>
-                    <div class="caption-bar">High-yield crops like Maize for better profitability.</div>
-                </div>
-                <div class="slide">
-                    <img src="images/impact.jpg" alt="Sustainability">
-                    <div class="overlay-text">
-                        <h1>Sustainable Farming</h1>
-                        <p>Plan today for a better agricultural tomorrow</p>
-                    </div>
-                    <div class="caption-bar">Plan today for a sustainable agricultural tomorrow.</div>
-                </div>
-                
-                <button class="arrow prev">&#10094;</button>
-                <button class="arrow next">&#10095;</button>
-            </div>
-            <div class="footer-action">
-                <button id="enterApp" class="main-btn">🌱 Start Planning Your Crops</button>
-            </div>
-        </div>
-    </div>
+<div class="slider-container" id="sliderSection">
+  <div class="welcome-overlay">
+    <h1>Welcome to Agridrop</h1>
+    <p>Your smart guide to water-efficient crops</p>
+  </div>
 
-    <div id="appPage" class="container" style="display:none;">
-        <div class="card form-card">
-            <h2 class="title">Agridrop – Water-Efficient Crop Planner</h2>
-            <form id="cropForm">
-                <div class="input-group">
-                    <label>Region:</label>
-                    <select id="region" required>
-                        <option value="">Select Region</option>
-                        <option value="South India">South India</option>
-                        <option value="North India">North India</option>
-                        <option value="East India">East India</option>
-                        <option value="West India">West India</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label>Water Availability:</label>
-                    <select id="water" required>
-                        <option value="">Select Level</option>
-                        <option value="Low">Low (Rainfed)</option>
-                        <option value="Medium">Medium (Borewell)</option>
-                        <option value="High">High (Canal/River)</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label>Land Size (in acres):</label>
-                    <input type="number" id="landSize" value="5" min="0.1" step="0.1" required>
-                </div>
-                <button type="submit" class="submit-btn">Get Recommendations</button>
-            </form>
-            <div id="results" class="results-area"></div>
-        </div>
+  <div class="slides">
+    <div class="slide active">
+      <img src="images/millet.webp" alt="Millets">
+      <div class="caption">Low water crops like Millets save water.</div>
     </div>
+    <div class="slide">
+      <img src="images/OIP.jpeg" alt="Maize">
+      <div class="caption">Medium water crops like Maize are profitable.</div>
+    </div>
+    <div class="slide">
+      <img src="images/impact.jpg" alt="Impact">
+      <div class="caption">Agridrop helps farmers plan crops efficiently.</div>
+    </div>
+  </div>
 
-    <script src="app (1).js"></script>
+  <button class="prev">&#10094;</button>
+  <button class="next">&#10095;</button>
+
+  <div class="enter-app" id="enterApp">🌱 Start Planning Your Crops</div>
+</div>
+
+<div class="app-container" id="appSection" style="display:none;">
+  <h2>Agridrop – Water-Efficient Crop Planner</h2>
+  <form id="cropForm">
+    <label>Region:</label>
+    <select id="region" required>
+      <option value="">Select Region</option>
+      <option value="South India">South India</option>
+      <option value="North India">North India</option>
+      <option value="East India">East India</option>
+      <option value="West India">West India</option>
+    </select>
+
+    <label>Water Availability:</label>
+    <select id="water" required>
+      <option value="">Select Water Availability</option>
+      <option value="Low">Low</option>
+      <option value="Medium">Medium</option>
+      <option value="High">High</option>
+    </select>
+
+    <label>Land Size (in acres):</label>
+    <input type="number" id="landSize" placeholder="Enter size in acres" min="0.1" step="0.1" required>
+
+    <button type="submit" class="submit-btn">Get Recommendations</button>
+  </form>
+
+  <div id="results"></div>
+</div>
+
+<script src="app.js"></script>
 </body>
 </html>
