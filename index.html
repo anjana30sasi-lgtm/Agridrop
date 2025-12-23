@@ -1,79 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to Agridrop</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agridrop | Smart Crop Planning</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
-<div class="main-card" id="sliderSection">
-    <div class="slider-container">
-        <div class="slides">
-            <div class="slide active">
-                <img src="images/millet.webp" alt="Millets">
-                <div class="header-overlay">
-                    <h1>Welcome to Agridrop</h1>
-                    <p>Your smart guide to water-efficient crops</p>
-                </div>
-                <div class="bottom-label">Low water crops like Millets save water.</div>
-            </div>
-            <div class="slide">
-                <img src="images/OIP.jpeg" alt="Maize">
-                <div class="header-overlay">
-                    <h1>Maximize Your Profit</h1>
-                    <p>Smart choices for sustainable farming</p>
-                </div>
-                <div class="bottom-label">Medium water crops like Maize are profitable.</div>
-            </div>
-            <div class="slide">
-                <img src="images/impact.jpg" alt="Impact">
-                <div class="header-overlay">
-                    <h1>Smart Farming</h1>
-                    <p>Plan better for a greener tomorrow</p>
-                </div>
-                <div class="bottom-label">Agridrop helps farmers plan crops efficiently.</div>
-            </div>
+  <div id="landingSection" class="main-card">
+    <div class="slider-box">
+      <div class="slides">
+        <div class="slide active">
+          <img src="images/millet.webp" alt="Millets">
+          <div class="header-text">
+            <h1>Welcome to Agridrop</h1>
+            <p>Your smart guide to water-efficient crops</p>
+          </div>
+          <div class="label-bar">Low water crops like Millets save water.</div>
         </div>
+        <div class="slide">
+          <img src="images/OIP.jpeg" alt="Maize">
+          <div class="header-text">
+            <h1>Maximize Profit</h1>
+            <p>Data-driven choices for every farmer</p>
+          </div>
+          <div class="label-bar">Medium water crops like Maize are profitable.</div>
+        </div>
+        <div class="slide">
+          <img src="images/impact.jpg" alt="Sustainability">
+          <div class="header-text">
+            <h1>Smart Farming</h1>
+            <p>Efficient planning for a better tomorrow</p>
+          </div>
+          <div class="label-bar">Agridrop helps farmers plan crops efficiently.</div>
+        </div>
+      </div>
     </div>
-    <div class="button-footer">
-        <button id="enterApp" class="start-btn">🌱 Start Planning Your Crops</button>
+    <div class="footer-area">
+      <button id="enterApp" class="btn-start">🌱 Start Planning Your Crops</button>
     </div>
-</div>
+  </div>
 
-<div class="main-card app-view" id="appSection" style="display:none;">
-    <h2 class="title">Agridrop – Water-Efficient Crop Planner</h2>
+  <div id="formSection" class="main-card entry-padding" style="display:none;">
+    <h2 class="form-title">Agridrop – Water-Efficient Crop Planner</h2>
     <form id="cropForm">
-        <div class="form-group">
-            <label>Region:</label>
-            <select id="region" required>
-                <option value="">Select Region</option>
-                <option>South India</option>
-                <option>North India</option>
-                <option>East India</option>
-                <option>West India</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>Water Availability:</label>
-            <select id="water" required>
-                <option value="">Select Level</option>
-                <option>Low</option>
-                <option>Medium</option>
-                <option>High</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>Land Size (in acres):</label>
-            <input type="number" id="landSize" placeholder="5" min="0.1" step="0.1" required>
-        </div>
-        <button type="submit" class="submit-btn">Get Recommendations</button>
+      <div class="field">
+        <label>Region:</label>
+        <select id="region" required>
+          <option value="">Select Region</option>
+          <option>South India</option>
+          <option>North India</option>
+          <option>East India</option>
+          <option>West India</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Water Availability:</label>
+        <select id="water" required>
+          <option value="">Select Level</option>
+          <option>Low</option>
+          <option>Medium</option>
+          <option>High</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Land Size (in acres):</label>
+        <input type="number" id="landSize" value="5" step="0.1" required>
+      </div>
+      <button type="submit" class="btn-submit">Get Recommendations</button>
     </form>
     <div id="results"></div>
-</div>
+  </div>
 
-<script src="app.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
