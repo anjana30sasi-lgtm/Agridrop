@@ -2,7 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 
-app.use(cors()); // Allows your frontend to communicate with this server
+// Enable CORS so your GitHub Pages frontend can communicate with this Render backend
+app.use(cors());
 
 // Database of 44 Crops with region, water need, and yield/profit metrics
 const cropData = [
@@ -36,6 +37,8 @@ const cropData = [
     { crop: "Groundnut", water_need: "Low", region: "West India", yield_per_acre: 2.1, profit_per_acre: 45000 },
     { crop: "Cucumber", water_need: "Low", region: "West India", yield_per_acre: 2.2, profit_per_acre: 47000 },
     { crop: "Brinjal", water_need: "Medium", region: "West India", yield_per_acre: 2, profit_per_acre: 44000 },
+    { crop: "Grapes", water_need: "Medium", region: "West India", yield_per_acre: 3, profit_per_acre: 68000 },
+    { crop: "Pomegranate", water_need: "Low", region: "West India", yield_per_acre: 2, profit_per_acre: 62000 },
 
     // EAST INDIA
     { crop: "Jute", water_need: "High", region: "East India", yield_per_acre: 2.5, profit_per_acre: 55000 },
@@ -49,8 +52,6 @@ const cropData = [
     { crop: "Tomato", water_need: "Medium", region: "Central India", yield_per_acre: 2.3, profit_per_acre: 55000 },
     
     // ADDITIONAL VARIED CROPS
-    { crop: "Grapes", water_need: "Medium", region: "West India", yield_per_acre: 3, profit_per_acre: 68000 },
-    { crop: "Pomegranate", water_need: "Low", region: "West India", yield_per_acre: 2, profit_per_acre: 62000 },
     { crop: "Blackgram", water_need: "Low", region: "South India", yield_per_acre: 1.5, profit_per_acre: 35000 },
     { crop: "Mungbean", water_need: "Low", region: "North India", yield_per_acre: 1.4, profit_per_acre: 34000 },
     { crop: "Kidney Beans", water_need: "Medium", region: "North India", yield_per_acre: 1.8, profit_per_acre: 41000 },
@@ -63,25 +64,35 @@ const cropData = [
     { crop: "Pear", water_need: "Medium", region: "North India", yield_per_acre: 2.5, profit_per_acre: 60000 }
 ];
 
-// The Endpoint that your app (1).js calls
+// Root route to check if server is running
+app.get('/', (req, res) => {
+    res.send("Agridrop Backend is Live and Ready!");
+});
+
+// The Recommendation API Endpoint
 app.get('/recommend', (req, res) => {
     const { water, region, land } = req.query;
     const landSize = parseFloat(land) || 1;
 
-    // Filter results to find exact matches
+    // Safety check: if parameters are missing
+    if (!water || !region) {
+        return res.status(400).json({ error: "Missing water or region parameters" });
+    }
+
     const filtered = cropData.filter(c => 
         c.region.toLowerCase() === region.toLowerCase() && 
         c.water_need.toLowerCase() === water.toLowerCase()
     ).map(c => ({
         ...c,
         total_yield: (c.yield_per_acre * landSize).toFixed(2),
-        total_profit: (c.profit_per_acre * landSize)
+        total_profit: Math.round(c.profit_per_acre * landSize)
     }));
 
     res.json(filtered);
 });
 
-const PORT = 3000;
+// Use the PORT provided by Render environment, or 3000 locally
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Agridrop Backend is running on http://localhost:${PORT}`);
+    console.log(`Server is running on port ${PORT}`);
 });
